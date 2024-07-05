@@ -7,8 +7,7 @@ import 'package:p15_fs_repo/src/features/add_drink/utils/snackbar_utils.dart';
 class AddDrinkScreen extends StatefulWidget {
   final DatabaseRepository databaseRepository;
 
-  const AddDrinkScreen({Key? key, required this.databaseRepository})
-      : super(key: key);
+  const AddDrinkScreen({super.key, required this.databaseRepository});
 
   @override
   AddDrinkScreenState createState() => AddDrinkScreenState();

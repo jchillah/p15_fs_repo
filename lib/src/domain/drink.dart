@@ -8,6 +8,7 @@ class Drink {
   final double price;
   final String vol;
   final String quantity;
+  bool isDeleted;
 
   Drink({
     required this.id,
@@ -17,40 +18,36 @@ class Drink {
     required this.price,
     required this.vol,
     required this.quantity,
+    this.isDeleted = false,
   });
+
+  factory Drink.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    final data = snapshot.data();
+    if (data == null) {
+      throw StateError('DocumentSnapshot does not contain data');
+    }
+    return Drink(
+      id: data['id'] as int,
+      type: data['type'] as String,
+      name: data['name'] as String,
+      brand: data['brand'] as String,
+      price: (data['price'] as num).toDouble(),
+      vol: data['vol'] as String,
+      quantity: data['quantity'] as String,
+      isDeleted: data['isDeleted'] as bool ?? false,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'type': type,
       'name': name,
       'brand': brand,
       'price': price,
       'vol': vol,
       'quantity': quantity,
+      'isDeleted': isDeleted,
     };
-  }
-
-  factory Drink.fromMap(Map<String, dynamic> map, int id) {
-    return Drink(
-      id: id,
-      type: map['type'],
-      name: map['name'],
-      brand: map['brand'],
-      price: map['price'],
-      vol: map['vol'],
-      quantity: map['quantity'],
-    );
-  }
-  static Drink fromSnapshot(DocumentSnapshot<Map<String, dynamic>> snapshot) {
-    final data = snapshot.data()!;
-    return Drink(
-      id: data['id'],
-      type: data['type'],
-      name: data['name'],
-      brand: data['brand'],
-      price: data['price'],
-      vol: data['vol'],
-      quantity: data['quantity'],
-    );
   }
 }

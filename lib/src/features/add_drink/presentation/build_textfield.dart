@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget _buildTextField({
+Widget buildTextField({
   required TextEditingController controller,
   required String labelText,
 }) {

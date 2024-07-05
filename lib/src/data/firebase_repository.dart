@@ -11,7 +11,7 @@ class FirestoreDatabase implements DatabaseRepository {
   Future<List<Drink>> getDrinks() async {
     final snapshot = await _firebaseFirestore.collection('Drinks').get();
     return snapshot.docs
-        .where((doc) => doc.exists)
+        .where((doc) => doc.exists && !(doc.data()['isDeleted'] ?? false))
         .map((doc) => Drink.fromSnapshot(doc))
         .toList();
   }
@@ -20,7 +20,7 @@ class FirestoreDatabase implements DatabaseRepository {
   Stream<List<Drink>> drinksStream() {
     return _firebaseFirestore.collection('Drinks').snapshots().map((snapshot) {
       return snapshot.docs
-          .where((doc) => doc.exists)
+          .where((doc) => doc.exists && !(doc.data()['isDeleted'] ?? false))
           .map((doc) => Drink.fromSnapshot(doc))
           .toList();
     });
@@ -32,6 +32,14 @@ class FirestoreDatabase implements DatabaseRepository {
         .collection('Drinks')
         .doc(drink.id.toString())
         .set(drink.toMap());
+  }
+
+  @override
+  Future<void> markDrinkAsDeleted(int drinkId) async {
+    await _firebaseFirestore
+        .collection('Drinks')
+        .doc(drinkId.toString())
+        .update({'isDeleted': true});
   }
 
   @override

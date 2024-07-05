@@ -25,4 +25,10 @@ class MockDatabase implements DatabaseRepository {
   Future<void> removeDrink(int drinkId) async {
     _drinks.removeWhere((drink) => drink.id == drinkId);
   }
+
+  @override
+  Future<void> markDrinkAsDeleted(int drinkId) {
+    // TODO: implement markDrinkAsDeleted
+    throw UnimplementedError();
+  }
 }

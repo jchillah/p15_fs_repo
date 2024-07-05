@@ -111,18 +111,18 @@ class DrinkListScreenState extends State<DrinkListScreen> {
 
   void _removeDrink(int drinkId) async {
     try {
-      await widget.databaseRepository.removeDrink(drinkId);
+      await widget.databaseRepository.markDrinkAsDeleted(drinkId);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Drink removed successfully'),
+          content: Text('Drink marked as deleted successfully'),
           duration: Duration(seconds: 2),
         ),
       );
     } catch (e) {
-      debugPrint('Failed to remove drink: $e');
+      debugPrint('Failed to mark drink as deleted: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Failed to remove drink. Please try again.'),
+          content: Text('Failed to mark drink as deleted. Please try again.'),
           duration: Duration(seconds: 2),
         ),
       );
