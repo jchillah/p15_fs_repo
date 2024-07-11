@@ -9,6 +9,7 @@ class DrinkListView extends StatelessWidget {
     super.key,
     required this.drinks,
     required this.onRemoveDrink,
+    required void Function(Drink drink) onEditDrink,
   });
 
   @override

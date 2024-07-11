@@ -5,25 +5,50 @@ import 'package:p15_fs_repo/src/features/add_drink/presentation/validate_input.d
 import 'package:p15_fs_repo/src/features/add_drink/utils/snackbar_utils.dart';
 import 'package:provider/provider.dart';
 
-class AddDrinkScreen extends StatefulWidget {
-  const AddDrinkScreen({super.key});
+class EditDrinkScreen extends StatefulWidget {
+  final Drink drink;
+
+  const EditDrinkScreen({
+    super.key,
+    required this.drink,
+  });
 
   @override
-  AddDrinkScreenState createState() => AddDrinkScreenState();
+  _EditDrinkScreenState createState() => _EditDrinkScreenState();
 }
 
-class AddDrinkScreenState extends State<AddDrinkScreen> {
-  final TextEditingController _typeController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _brandController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
-  final TextEditingController _volController = TextEditingController();
-  final TextEditingController _quantityController = TextEditingController();
+class _EditDrinkScreenState extends State<EditDrinkScreen> {
+  late TextEditingController _typeController;
+  late TextEditingController _nameController;
+  late TextEditingController _brandController;
+  late TextEditingController _priceController;
+  late TextEditingController _volController;
+  late TextEditingController _quantityController;
 
-  // Placeholder for demonstration purposes; replace with actual user UID retrieval
-  String get userUid => 'user123'; // Replace with actual logic to get user UID
+  @override
+  void initState() {
+    super.initState();
+    _typeController = TextEditingController(text: widget.drink.type);
+    _nameController = TextEditingController(text: widget.drink.name);
+    _brandController = TextEditingController(text: widget.drink.brand);
+    _priceController =
+        TextEditingController(text: widget.drink.price.toString());
+    _volController = TextEditingController(text: widget.drink.vol);
+    _quantityController = TextEditingController(text: widget.drink.quantity);
+  }
 
-  void _addDrink() async {
+  @override
+  void dispose() {
+    _typeController.dispose();
+    _nameController.dispose();
+    _brandController.dispose();
+    _priceController.dispose();
+    _volController.dispose();
+    _quantityController.dispose();
+    super.dispose();
+  }
+
+  void _updateDrink() async {
     String type = _typeController.text.trim();
     String name = _nameController.text.trim();
     String brand = _brandController.text.trim();
@@ -36,23 +61,23 @@ class AddDrinkScreenState extends State<AddDrinkScreen> {
       return;
     }
 
-    final drink = Drink(
-      id: DateTime.now().millisecondsSinceEpoch,
-      uid: userUid, // Set user UID here
-      quantity: quantity,
+    final updatedDrink = Drink(
+      id: widget.drink.id,
       type: type,
       name: name,
       brand: brand,
       price: price,
       vol: vol,
+      quantity: quantity,
+      uid: '', // Assuming uid is required in Drink constructor
     );
 
     try {
-      await context.read<DatabaseRepository>().addDrink(drink);
+      await context.read<DatabaseRepository>().updateDrink(updatedDrink);
       Navigator.of(context).pop();
     } catch (e) {
-      debugPrint('Failed to add drink: $e');
-      showCustomSnackbar(context, 'Failed to add drink. Please try again.');
+      debugPrint('Failed to update drink: $e');
+      showCustomSnackbar(context, 'Failed to update drink. Please try again.');
     }
   }
 
@@ -72,7 +97,7 @@ class AddDrinkScreenState extends State<AddDrinkScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Drink'),
+        title: const Text('Edit Drink'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -99,8 +124,8 @@ class AddDrinkScreenState extends State<AddDrinkScreen> {
                   controller: _quantityController, labelText: 'Drink Quantity'),
               const SizedBox(height: 16.0),
               ElevatedButton(
-                onPressed: _addDrink,
-                child: const Text('Add Drink'),
+                onPressed: _updateDrink,
+                child: const Text('Update Drink'),
               ),
             ],
           ),

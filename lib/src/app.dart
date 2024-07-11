@@ -1,18 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:p15_fs_repo/src/data/database_repository.dart';
 import 'package:p15_fs_repo/src/data/firebase_auth.dart';
 import 'package:p15_fs_repo/src/features/authentication/presentation/login_screen.dart';
 import 'package:p15_fs_repo/src/features/main_screen/presentation/main_screen.dart';
+import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
-  final DatabaseRepository databaseRepository;
-  final AuthRepository authRepository;
-
-  const App(
-      {super.key,
-      required this.databaseRepository,
-      required this.authRepository});
+  const App({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,19 +16,12 @@ class App extends StatelessWidget {
     const mainKey = ValueKey('MainScreen');
 
     return StreamBuilder(
-        stream: authRepository.authStateChanges(),
+        stream: context.read<AuthRepository>().authStateChanges(),
         builder: (context, AsyncSnapshot<User?> snapshot) {
           final user = snapshot.data;
           return MaterialApp(
             key: user == null ? loginKey : mainKey,
-            home: user == null
-                ? LoginScreen(
-                    databaseRepository: databaseRepository,
-                    authRepository: authRepository,
-                  )
-                : MainScreen(
-                    databaseRepository: databaseRepository,
-                    authRepository: authRepository),
+            home: user == null ? LoginScreen() : MainScreen(),
           );
         });
   }

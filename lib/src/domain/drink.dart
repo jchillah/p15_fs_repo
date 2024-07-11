@@ -8,7 +8,8 @@ class Drink {
   final double price;
   final String vol;
   final String quantity;
-  bool isDeleted;
+  final bool isDeleted;
+  final String uid; // User UID field added
 
   Drink({
     required this.id,
@@ -18,6 +19,7 @@ class Drink {
     required this.price,
     required this.vol,
     required this.quantity,
+    required this.uid, // Added user UID here
     this.isDeleted = false,
   });
 
@@ -34,7 +36,8 @@ class Drink {
       price: (data['price'] as num).toDouble(),
       vol: data['vol'] as String,
       quantity: data['quantity'] as String,
-      isDeleted: data['isDeleted'] as bool ?? false,
+      uid: data['uid'] as String, // Retrieve user UID from Firestore
+      isDeleted: data['isDeleted'] as bool,
     );
   }
 
@@ -47,6 +50,7 @@ class Drink {
       'price': price,
       'vol': vol,
       'quantity': quantity,
+      'uid': uid, // Include user UID in the map
       'isDeleted': isDeleted,
     };
   }

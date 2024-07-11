@@ -1,19 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:p15_fs_repo/src/data/database_repository.dart';
 import 'package:p15_fs_repo/src/data/firebase_auth.dart';
 import 'package:p15_fs_repo/src/features/authentication/application/validators.dart';
 import 'package:p15_fs_repo/src/features/authentication/presentation/sign_up_screen.dart';
 import 'package:p15_fs_repo/src/features/main_screen/presentation/main_screen.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
-  final DatabaseRepository databaseRepository;
-  final AuthRepository authRepository;
-
   const LoginScreen({
     super.key,
-    required this.databaseRepository,
-    required this.authRepository,
   });
 
   @override
@@ -55,18 +50,15 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
 
-      await widget.authRepository.loginWithEmailAndPassword(
-        _emailController.text,
-        _pwController.text,
-      );
+      await context.read<AuthRepository>().loginWithEmailAndPassword(
+            _emailController.text,
+            _pwController.text,
+          );
 
       // Navigiere zum MainScreen nach erfolgreichem Login
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => MainScreen(
-            databaseRepository: widget.databaseRepository,
-            authRepository: widget.authRepository,
-          ),
+          builder: (context) => MainScreen(),
         ),
       );
     } on FirebaseAuthException catch (e) {
@@ -160,10 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SignUpScreen(
-                          databaseRepository: widget.databaseRepository,
-                          authRepository: widget.authRepository,
-                        ),
+                        builder: (context) => SignUpScreen(),
                       ),
                     );
                   },

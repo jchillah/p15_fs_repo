@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:p15_fs_repo/src/data/database_repository.dart';
 import 'package:p15_fs_repo/src/data/firebase_auth.dart';
 import 'package:p15_fs_repo/src/features/authentication/application/validators.dart';
 import 'package:p15_fs_repo/src/features/authentication/presentation/login_screen.dart';
+import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
   // Attribute
-  final DatabaseRepository databaseRepository;
-  final AuthRepository authRepository;
 
   // Konstruktor
-  const SignUpScreen(
-      {super.key,
-      required this.databaseRepository,
-      required this.authRepository});
+  const SignUpScreen({
+    super.key,
+  });
 
   // Methoden
   @override
@@ -117,8 +114,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(height: 32),
                 ElevatedButton(
                   onPressed: () async {
-                    await widget.authRepository.signUpWithEmailAndPassword(
-                        _emailController.text, _pwController.text);
+                    await context
+                        .read<AuthRepository>()
+                        .signUpWithEmailAndPassword(
+                            _emailController.text, _pwController.text);
                   },
                   child: const Padding(
                     padding: EdgeInsets.all(8.0),
@@ -133,10 +132,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LoginScreen(
-                            databaseRepository: widget.databaseRepository,
-                            authRepository: widget.authRepository,
-                          ),
+                          builder: (context) => LoginScreen(),
                         ));
                   },
                   child: const Text("Bereits einen Account? Zum Login"),

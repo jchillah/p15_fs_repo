@@ -31,4 +31,10 @@ class MockDatabase implements DatabaseRepository {
     // TODO: implement markDrinkAsDeleted
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> updateDrink(Drink drink) {
+    // TODO: implement updateDrink
+    throw UnimplementedError();
+  }
 }

@@ -49,4 +49,12 @@ class FirestoreDatabase implements DatabaseRepository {
         .doc(drinkId.toString())
         .delete();
   }
+
+  @override
+  Future<void> updateDrink(Drink drink) async {
+    await _firebaseFirestore
+        .collection('Drinks')
+        .doc(drink.id.toString())
+        .update(drink.toMap());
+  }
 }

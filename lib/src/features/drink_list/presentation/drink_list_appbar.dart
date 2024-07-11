@@ -9,14 +9,14 @@ class DrinkListAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function(String) onSortOptionSelected;
 
   const DrinkListAppBar({
-    Key? key,
+    super.key,
     required this.searchController,
     required this.onSearchChanged,
     required this.onClearSearch,
     required this.isSortedAscending,
     required this.onSortOrderChanged,
     required this.onSortOptionSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

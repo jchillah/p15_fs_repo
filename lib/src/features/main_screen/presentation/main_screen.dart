@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:p15_fs_repo/src/data/database_repository.dart';
 import 'package:p15_fs_repo/src/data/firebase_auth.dart';
 import 'package:p15_fs_repo/src/features/drink_list/presentation/drink_list_screen.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatelessWidget {
-  final DatabaseRepository databaseRepository;
-  final AuthRepository authRepository;
-
-  const MainScreen(
-      {super.key,
-      required this.databaseRepository,
-      required this.authRepository});
+  const MainScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +19,7 @@ class MainScreen extends StatelessWidget {
           Center(
             child: ElevatedButton(
               onPressed: () {
-                authRepository.logout();
+                context.read<AuthRepository>().logout();
               },
               child: const Text('Logout'),
             ),
@@ -34,10 +30,7 @@ class MainScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) {
-                    return DrinkListScreen(
-                      databaseRepository: databaseRepository,
-                      authRepository: authRepository,
-                    );
+                    return const DrinkListScreen();
                   }),
                 );
               },

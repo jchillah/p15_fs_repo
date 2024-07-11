@@ -6,4 +6,5 @@ abstract class DatabaseRepository {
   Future<void> addDrink(Drink drink);
   Future<void> markDrinkAsDeleted(int drinkId);
   Future<void> removeDrink(int drinkId);
+  Future<void> updateDrink(Drink drink);
 }

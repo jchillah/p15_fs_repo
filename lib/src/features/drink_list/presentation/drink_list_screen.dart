@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:p15_fs_repo/src/data/database_repository.dart';
-import 'package:p15_fs_repo/src/data/firebase_auth.dart';
 import 'package:p15_fs_repo/src/domain/drink.dart';
 import 'package:p15_fs_repo/src/features/add_drink/presentation/add_drink_screen.dart';
 import 'package:p15_fs_repo/src/features/drink_list/application/drink_helper.dart';
+import 'package:provider/provider.dart';
 
 import 'drink_list_appbar.dart';
 import 'drink_list_view.dart';
+import 'edit_drink_screen.dart'; // Import the edit drink screen
 
 class DrinkListScreen extends StatefulWidget {
-  final DatabaseRepository databaseRepository;
-
   const DrinkListScreen({
     super.key,
-    required this.databaseRepository,
-    required AuthRepository authRepository,
   });
 
   @override
@@ -31,7 +28,7 @@ class DrinkListScreenState extends State<DrinkListScreen> {
   @override
   void initState() {
     super.initState();
-    _drinksStream = widget.databaseRepository.drinksStream();
+    _drinksStream = context.read<DatabaseRepository>().drinksStream();
   }
 
   @override
@@ -90,6 +87,7 @@ class DrinkListScreenState extends State<DrinkListScreen> {
           return DrinkListView(
             drinks: filteredDrinks,
             onRemoveDrink: _removeDrink,
+            onEditDrink: _editDrink, // Pass the edit function to the list view
           );
         },
       ),
@@ -98,9 +96,7 @@ class DrinkListScreenState extends State<DrinkListScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddDrinkScreen(
-                databaseRepository: widget.databaseRepository,
-              ),
+              builder: (context) => const AddDrinkScreen(),
             ),
           );
         },
@@ -111,7 +107,7 @@ class DrinkListScreenState extends State<DrinkListScreen> {
 
   void _removeDrink(int drinkId) async {
     try {
-      await widget.databaseRepository.markDrinkAsDeleted(drinkId);
+      await context.read<DatabaseRepository>().markDrinkAsDeleted(drinkId);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Drink marked as deleted successfully'),
@@ -127,5 +123,16 @@ class DrinkListScreenState extends State<DrinkListScreen> {
         ),
       );
     }
+  }
+
+  void _editDrink(Drink drink) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditDrinkScreen(
+          drink: drink,
+        ),
+      ),
+    );
   }
 }
