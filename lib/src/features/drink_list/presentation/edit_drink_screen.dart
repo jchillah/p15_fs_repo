@@ -14,10 +14,10 @@ class EditDrinkScreen extends StatefulWidget {
   });
 
   @override
-  _EditDrinkScreenState createState() => _EditDrinkScreenState();
+  EditDrinkScreenState createState() => EditDrinkScreenState();
 }
 
-class _EditDrinkScreenState extends State<EditDrinkScreen> {
+class EditDrinkScreenState extends State<EditDrinkScreen> {
   late TextEditingController _typeController;
   late TextEditingController _nameController;
   late TextEditingController _brandController;

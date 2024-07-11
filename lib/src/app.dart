@@ -21,7 +21,7 @@ class App extends StatelessWidget {
           final user = snapshot.data;
           return MaterialApp(
             key: user == null ? loginKey : mainKey,
-            home: user == null ? LoginScreen() : MainScreen(),
+            home: user == null ? const LoginScreen() : const MainScreen(),
           );
         });
   }
